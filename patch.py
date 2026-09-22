@@ -79,3 +79,33 @@ def delete_product(product_name: str):
     return {
         "message": "product not found"
     }
+
+class ProductUpdate(BaseModel):
+    name: str | None = None
+    price: float | None = None
+    quantity: int | None = None
+    
+@app.patch("/product")
+def patch_product(product_name: str, update: ProductUpdate):
+
+    for product in products:
+
+        if product["name"] == product_name:
+
+            if update.name is not None:
+                product["name"] = update.name
+
+            if update.price is not None:
+                product["price"] = update.price
+
+            if update.quantity is not None:
+                product["quantity"] = update.quantity
+
+            return {
+                "message": "Product partially updated",
+                "product": product
+            }
+
+    return {
+        "message": "Product not found"
+    }
